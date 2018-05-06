@@ -47,7 +47,7 @@ void bulls_cows()
 	vector<char>solution = get_solution();
 
 	while (!win) {
-		
+
 		vector<int>bull(4, 0); vector<int>cow(4, 0);
 		int bulls{ 0 }, cows{ 0 };
 
@@ -92,7 +92,7 @@ try {
 
 	bool play{ true };
 	char yn{ 0 };
-	
+
 	cout << "Lets play a game of Bulls and Cows with four lower case unique letters\n";
 
 	while (play) {
@@ -103,8 +103,8 @@ try {
 		if (yn == 'n')
 			play = false;
 	}
-		
-	
+
+
 }
 catch (exception& e) {
 	cerr << "error: " << e.what() << "\n";
