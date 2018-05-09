@@ -90,14 +90,13 @@ Token_stream ts;        // provides get() and putback()
 double expression();    // declaration so that primary() can call expression()
 
 //-------------------------------------------------------------------------------------------------------
-
-long long int factorial(long long int d)
+long long int factorial( long long int d)
 {
 	long long int fac = d;
 
 	if (fac < 0)
 		error("factorial for negatives not defined");
-	else if (fac > 170)
+	else if (fac > 21)
 		error("number to large");
 	else if (abs(fac - d) > 0)
 		error("factorial not defined for floats");
