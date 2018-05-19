@@ -425,24 +425,6 @@ double square_root()
 //------------------------------------------------------------------------------------------------
 
 
-double constant()
-{
-	Token t = ts.get();
-	if (t.kind != name) error("name expected for constant");
-	string var_name = t.name;
-
-	Token t2 = ts.get();
-	if (t2.kind != '=') error("= missing for constant ", var_name);
-	double d = expression();
-	st.define_name(var_name, d, true); // thise declares a constant
-	return d;
-}
-
-
-
-//------------------------------------------------------------------------------------------------
-
-
 double declaration(Token lc)
 {
 	bool b{ 0 };
