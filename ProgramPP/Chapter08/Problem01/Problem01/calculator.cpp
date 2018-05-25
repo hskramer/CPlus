@@ -1,67 +1,10 @@
+#include "../../std_lib_facilities.h"
+
 
 /*
+
 Basic calculator: very robust even through this at it: sqrt(pow(2*(1+2),sqrt(3+7)))+2*pow((2+3)*2,(10/3+1))/(4+sqrt(pow(4,(6/2))));
 noet it does round the exponent to the nearest integer. This gave correct result tested using Wolfram Mathematica
-
-		
-		The grammar for input is:
-	
-	Calculation:
-		Statement
-		Print
-		Quit
-		Help
-		Calculation Statement
-
-	Statement:
-		Declaration
-		Expression
-
-	Declaration:
-		"let" Name "=" Expression
-		"const" name "=" Expression
-
-	Name:
-		letter
-		letter Sequence
-
-	Sequence:
-		letter
-		digit
-		"_"
-		letter Sequence
-		digit Sequence
-		"_" Sequence
-
-	Print:
-		";"
-
-	Quit:
-		"quit"
-
-	Expression:
-		Term
-		Expression "+" Term
-		Expression "-" Term
-
-	Term:
-		Primary
-		Term "*" Primary
-		Term "/" Primary
-		Term "%" Primary
-
-	Primary:
-		Number
-		"(" Expression ")"
-		"-" Primary
-		"+" Primary
-		"sqrt(" Expression ")"
-		"pow(" Expression "," Integer ")"
-	Name
-		Name "=" Expression
-	Number:
-		floating-point-literal
-
 
 */
 
@@ -84,6 +27,7 @@ public:
 class Token_stream {
 public:
 	Token_stream();				// make a Token from cin
+	Token_stream(istream&);		// Token_stream for istream
 	Token get();				// get a Token
 	void putback(Token t);		// putback a Token if not used by a function
 	void ignore(char c);
@@ -142,14 +86,13 @@ const char number = '8';		// number token
 const char name = 'a';			// name token
 
 const string declkey = "let";		// declare new variable key word
-const string constkey = "con";	// declare a constant
+const string constkey = "con";		// declare a constant
 const string quitkey = "quit";		// quit key word
 const string sqrtkey = "sqrt";		// sqrt key wors
 const string powrkey = "pow";		// power key word
 
 
-									//------------------------------------------------------------------------------------------------
-
+//------------------------------------------------------------------------------------------------
 
 
 Token Token_stream::get()
@@ -159,8 +102,14 @@ Token Token_stream::get()
 		return buffer;
 	}
 	char ch;
-	cin >> ch;		// note that >> skips whitespace (space, newline, tab, etc.)
+	cin.get(ch);
+	while (isspace(ch)) {
+		if (ch == '\n') return Token(print); // prints when newline is entered
+		cin.get(ch);
+	};
 	switch (ch) {
+	case 'h':
+	case 'H':
 	case '(':
 	case ')':
 	case '+':
@@ -168,8 +117,8 @@ Token Token_stream::get()
 	case '*':
 	case '/':
 	case '%':
-	case ';':
 	case '=':
+	case ';':
 	case ',':
 		return Token(ch);		// let each character represnenst itself
 	case '.':					// floating points can start with a dot
@@ -187,7 +136,7 @@ Token Token_stream::get()
 			while (cin.get(ch) && (isalpha(ch) || isdigit(ch) || ch == '_')) s += ch; // allow underscore in variable names
 			cin.putback(ch);
 			if (s == declkey) return Token(let);		// token that allows for the use of variables in calculations
-			if (s == powrkey) return Token(powr);
+			if (s == powrkey) return Token(powr);		// token for power 
 			if (s == sqrtkey) return Token(sqroot);		// token for taking the square root
 			if (s == constkey) return Token(constnt);	// token for declaring a constant
 			if (s == quitkey) return Token(quit);		// quit token
@@ -213,11 +162,11 @@ public:
 class Symbol_table {
 	vector<Variable>var_table;
 public:
-	void set_value(string,  double, bool);
+	void set_value(string, double, bool);
 	double get_value(string);
 	bool is_declared(string);
 	double define_name(string, double, bool);
-	
+
 };
 
 // return value of variable given the name 
@@ -254,10 +203,11 @@ bool Symbol_table::is_declared(string s)
 	return false;
 }
 
+// defines a variable or constant and puts in the var_table
 double Symbol_table::define_name(string var, double val, bool c)
 {
 	if (is_declared(var)) error(var, " declared twice");
-	var_table.push_back(Variable{ var, val, c }); // define a variable or constant and put in the table
+	var_table.push_back(Variable{ var, val, c }); // define a variable setting constant to false
 	return val;
 }
 
@@ -265,40 +215,38 @@ double Symbol_table::define_name(string var, double val, bool c)
 //------------------------------------------------------------------------------------------------
 
 
-Token_stream ts;		// provides get() and putback() 
-
 Symbol_table st;		// provide access to the Symbol table
 
-double expression();	// declaration so that primary() can call expression()
+double expression(Token_stream& ts);	// declaration so that primary() can call expression()
 
-double square_root();	// declaration so that primary() can call square_root()
+double square_root(Token_stream& ts);	// declaration so that primary() can call square_root()
 
-double power();			// declaration so that primary() can call power()
+double power(Token_stream& ts);			// declaration so that primary() can call power()
 
 
 //------------------------------------------------------------------------------------------------
 
 
-						// deal with numbers and parentheses and variable names
-double primary()
+// deal with numbers and parentheses and variable names
+double primary(Token_stream& ts)
 {
 	Token t = ts.get();
 	double d{ 0 };
 	switch (t.kind) {
 	case '(':				// handle '(' expression ')'
-	{   d = expression();
+	{   d = expression(ts);
 	t = ts.get();
 	if (t.kind != ')') error("'(' expected");
 	break;
 	}
 	case powr:
-		d = power(); // since each function should perform one logical action I chose to use separate functions for power and sqrt
+		d = power(ts); // since each function should perform one logical action I chose to use separate functions for power and sqrt
 		break;
 	case sqroot:
-		d = square_root();
+		d = square_root(ts);
 		break;
 	case '-':
-		d = -primary();
+		d = -primary(ts);
 		break;
 	case number:
 		d = t.value;
@@ -306,7 +254,7 @@ double primary()
 	case name:
 	{	Token t2 = ts.get();
 	if (t2.kind == '=') {
-		d = expression();
+		d = expression(ts);
 		st.set_value(t.name, d, false);
 	}
 	else {
@@ -327,28 +275,28 @@ double primary()
 
 
 // deal with *, /, %
-double term()
+double term(Token_stream& ts)
 {
-	double left = primary();
+	double left = primary(ts);
 	Token t = ts.get();
 	while (true) {
 		switch (t.kind) {
 		case '*':
-			left *= primary();
+			left *= primary(ts);
 			t = ts.get();
 			break;
 		case '/':
-		{	double d = primary();
+		{	double d = primary(ts);
 		if (d == 0) error("/:divide by zero");
 		left /= d;
 		t = ts.get();
 		break;
 		}
-		case '%': // implemted floating point mod
+		case '%': // decided to do integer version now wanted to make sure it worked
 		{
-			double d = primary();
-			if (d == 0) error("%:divide by zero");
-			left = fmod(left, d);
+			int i1 = int(left);
+			int i2 = int(term(ts)); //norrow_cast<int> give info lost error
+			left = i1%i2;
 			t = ts.get();
 			break;
 		}
@@ -364,18 +312,18 @@ double term()
 
 
 // deal with + and -
-double expression()
+double expression(Token_stream& ts)
 {
-	double left = term();
+	double left = term(ts);
 	Token t = ts.get();
 	while (true) {
 		switch (t.kind) {
 		case '+':
-			left += term();
+			left += term(ts);
 			t = ts.get();
 			break;
 		case '-':
-			left -= term();
+			left -= term(ts);
 			t = ts.get();
 			break;
 		default:
@@ -389,19 +337,18 @@ double expression()
 //------------------------------------------------------------------------------------------------
 
 
-double power()
+double power(Token_stream& ts)
 {
 	double d{ 0 }; // this will work with very complex cases such as sqrt(pow(2*(1+2),(2+1))); or more sqrt(pow(2*(1+2),sqrt(3+7)))+2;
 
 	Token t = ts.get();
 	if (t.kind != '(') error("( expected"); // this both checks for proper use and allows for complex expression
-	d = expression();						// inside such as pow((2+1)*2, 3)
+	d = expression(ts);						// inside such as pow((2+1)*2, 3)
 
 	t = ts.get();
 	if (t.kind != ',') error(", expected"); // this check for proper use  ',' so it prevents other function from throwing errors
 
-	int i = expression(); // tried narr_cast<int> but it gave an "info lost" error so I decided to do this which works
-
+	int i = expression(ts);
 	t = ts.get();
 	if (t.kind != ')') error(") expected"); // this check for a closing ')' but it allows for complex statements for the exponents
 
@@ -413,9 +360,9 @@ double power()
 
 
 // provides a square root function for real numbers only
-double square_root()
+double square_root(Token_stream& ts)
 {
-	double d = primary();
+	double d = primary(ts);
 	if (d < 0) error("error sqrt of negative number");
 
 	return sqrt(d);
@@ -423,9 +370,24 @@ double square_root()
 
 
 //------------------------------------------------------------------------------------------------
+void calculate(Token_stream& ts);
+
+void help()
+{
+	cout << "This calculator has your basic operations: +, -, *, /, %, and some functions:" << endl;
+	cout << "pow(x,y) is your power function x^y, sqroot(x) for sqrt of x (positive numbers)" << endl;
+	cout << "You can define variables with 'let=' followed by at least one letter eg(let x=5.1)," << endl;
+	cout << "longer names are fine. You can change the value by typing the name followed by =new number, " << endl;
+	cout << "You can define constants using the word con=constant pi is already defined to see it's value" << endl;
+	cout << "type pi hit enter and it will print out. Hit enter any time your ready for an answer." << endl;
+
+}
 
 
-double declaration(Token lc)
+//------------------------------------------------------------------------------------------------
+
+
+double declaration(Token lc, Token_stream& ts)
 {
 	bool b{ 0 };
 	if (lc.kind == let)
@@ -439,7 +401,7 @@ double declaration(Token lc)
 
 	Token t2 = ts.get();
 	if (t2.kind != '=') error("= missing in declaration of ", var_name);
-	double d = expression();
+	double d = expression(ts);
 	st.define_name(var_name, d, b); // this now declares a variable or constant
 	return d;
 }
@@ -447,24 +409,24 @@ double declaration(Token lc)
 
 //------------------------------------------------------------------------------------------------
 
-double statement()
+double statement(Token_stream& ts)
 {
 	Token t = ts.get();
 	switch (t.kind) {
 	case let:
-		return declaration(t); // defines new variables
+		return declaration(t, ts); // defines new variables
 	case constnt:
-		return declaration(t);
+		return declaration(t, ts);
 	default:
 		ts.putback(t);
-		return expression();
+		return expression(ts);
 	}
 }
 
 //------------------------------------------------------------------------------------------------
 
 
-void clean_up_mess()  // basic clean up function
+void clean_up_mess(Token_stream& ts)  // basic clean up function
 {
 	ts.ignore(print); // skips everything until it finds the print Token ;
 }
@@ -476,24 +438,30 @@ const string result = "= ";
 
 void calculate() // This is our evaluation loop
 {
+	Token_stream ts;
 	while (cin) try {
 		cout << prompt;
 		Token t = ts.get();
 		while (t.kind == print) t = ts.get(); // first discard all "prints"
-		if (t.kind == quit) return;			  // quit
-		ts.putback(t);
-		cout << result << statement() << endl;
+		if (t.kind == 'h' || t.kind == 'H')
+			help();
+		else {
+			if (t.kind == quit) return;			  // quit
+			ts.putback(t);
+			cout << result << statement(ts) << endl;
+		}
+
 	}
 	catch (runtime_error& e) {
 		cerr << e.what() << endl;
-		clean_up_mess();
+		clean_up_mess(ts);
 	}
 }
 
 int main() // handle the start/end of the program and fatal errors
 
 try {
-
+	
 	st.define_name("pi", 3.141592653899, true);
 
 	calculate();

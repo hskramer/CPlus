@@ -3,8 +3,7 @@
 Basic calculator: very robust even through this at it: sqrt(pow(2*(1+2),sqrt(3+7)))+2*pow((2+3)*2,(10/3+1))/(4+sqrt(pow(4,(6/2))));
 noet it does round the exponent to the nearest integer. This gave correct result tested using Wolfram Mathematica
 
-		
-		The grammar for input is:
+				The grammar for input is:
 	
 	Calculation:
 		Statement
@@ -56,12 +55,11 @@ noet it does round the exponent to the nearest integer. This gave correct result
 		"-" Primary
 		"+" Primary
 		"sqrt(" Expression ")"
-		"pow(" Expression "," Integer ")"
+		"pow(" Expression "," Integer" ")"
 	Name
 		Name "=" Expression
 	Number:
 		floating-point-literal
-
 
 */
 
@@ -142,13 +140,13 @@ const char number = '8';		// number token
 const char name = 'a';			// name token
 
 const string declkey = "let";		// declare new variable key word
-const string constkey = "con";	// declare a constant
+const string constkey = "con";		// declare a constant
 const string quitkey = "quit";		// quit key word
 const string sqrtkey = "sqrt";		// sqrt key wors
 const string powrkey = "pow";		// power key word
 
 
-									//------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
 
 
 
@@ -159,7 +157,11 @@ Token Token_stream::get()
 		return buffer;
 	}
 	char ch;
-	cin >> ch;		// note that >> skips whitespace (space, newline, tab, etc.)
+	cin.get(ch);		// note that >> skips whitespace (space, newline, tab, etc.)
+	while (isspace(ch)) {
+		if (ch == '\n') return Token(print); // prints when newline is entered
+		cin.get(ch);
+	};	
 	switch (ch) {
 	case '(':
 	case ')':
@@ -168,8 +170,8 @@ Token Token_stream::get()
 	case '*':
 	case '/':
 	case '%':
-	case ';':
 	case '=':
+	case ';':
 	case ',':
 		return Token(ch);		// let each character represnenst itself
 	case '.':					// floating points can start with a dot
@@ -187,7 +189,7 @@ Token Token_stream::get()
 			while (cin.get(ch) && (isalpha(ch) || isdigit(ch) || ch == '_')) s += ch; // allow underscore in variable names
 			cin.putback(ch);
 			if (s == declkey) return Token(let);		// token that allows for the use of variables in calculations
-			if (s == powrkey) return Token(powr);
+			if (s == powrkey) return Token(powr);		// token for power 
 			if (s == sqrtkey) return Token(sqroot);		// token for taking the square root
 			if (s == constkey) return Token(constnt);	// token for declaring a constant
 			if (s == quitkey) return Token(quit);		// quit token
@@ -213,11 +215,11 @@ public:
 class Symbol_table {
 	vector<Variable>var_table;
 public:
-	void set_value(string,  double, bool);
+	void set_value(string, double, bool);
 	double get_value(string);
 	bool is_declared(string);
 	double define_name(string, double, bool);
-	
+
 };
 
 // return value of variable given the name 
@@ -254,10 +256,11 @@ bool Symbol_table::is_declared(string s)
 	return false;
 }
 
+// defines a variable or constant and puts in the var_table
 double Symbol_table::define_name(string var, double val, bool c)
 {
 	if (is_declared(var)) error(var, " declared twice");
-	var_table.push_back(Variable{ var, val, c }); // define a variable or constant and put in the table
+	var_table.push_back(Variable{ var, val, c }); // define a variable setting constant to false
 	return val;
 }
 
@@ -344,11 +347,11 @@ double term()
 		t = ts.get();
 		break;
 		}
-		case '%': // implemted floating point mod
+		case '%': // decided to do integer version now wanted to make sure it worked
 		{
-			double d = primary();
-			if (d == 0) error("%:divide by zero");
-			left = fmod(left, d);
+			int i1 = int(left);
+			int i2 = int(term()); //norrow_cast<int> give info lost error
+			left = i1%i2;
 			t = ts.get();
 			break;
 		}
