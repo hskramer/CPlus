@@ -25,7 +25,7 @@ try {
 	fibonacci(1, 2, fib, 43);
 	print("fibonacci", fib);
 
-	return 1;
+	return 0;
 }
 catch (exception& e) {
 	cerr << "error: " << e.what() << endl;
