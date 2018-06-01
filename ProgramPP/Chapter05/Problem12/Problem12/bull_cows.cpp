@@ -11,7 +11,7 @@ vector<int>get_solution()
 
 		y = 0;
 		new_solution[x] = rand() % 9 + 1; // range from 1 to 9
-		while (y < 4) {
+		while (y < 4) {		// check for duplicates 
 			if (new_solution[y] == new_solution[x] && x != y) {
 				--x; // set x back one
 				y = 0; // reset y
@@ -25,7 +25,6 @@ vector<int>get_solution()
 	}
 
 
-	// check for duplicates 
 	return new_solution;
 
 }
