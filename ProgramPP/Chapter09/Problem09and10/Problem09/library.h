@@ -18,6 +18,11 @@ namespace Lib {
 		string get_isbn() const { return isbn; }
 		Genre get_genre() const { return gen; }  // want to return genre name not index defined in book.cpp
 		int get_cpyright() const { return cpyr; }
+		bool checked_out() const { return chkd; }
+
+		// modifying operations
+		void check_in();
+		void check_out();
 
 	private:
 		string isbn;
@@ -50,9 +55,12 @@ namespace Lib {
 		string get_name() const { return uname; }
 		int get_libcard() const { return libcard; }
 		double get_fees() const { return fees; }
+		bool owe_fees(const Patron& p);
+		bool scan_libcrd()  { return true; }   // My library has an rfid scanner that automatically scans card when you enter
+		bool get_inlib();
 
 		// modifying operations
-		void set_fee(double fees);
+		void set_fee(double f);
 
 	private:
 		string uname;
@@ -60,8 +68,7 @@ namespace Lib {
 		double fees;
 	};
 
-	bool owe_fees(const Patron& p);
-
+	
 	bool operator==(const Patron& a, const Patron& b);
 	bool operator!=(const Patron& a, const Patron& b);
 
@@ -84,9 +91,8 @@ namespace Lib {
 		int year() const { return y; }
 
 		//modifying operations
-		void add_day(int n);
-		void add_month(int n);
-		void add_year(int n);
+		void add_days(int n);
+		void add_years(int n);
 
 	private:
 		int y;
@@ -103,14 +109,11 @@ namespace Lib {
 	bool operator!=(const Date& a, const Date& b);
 
 	ostream& operator<<(ostream& os, const Date& d);
-	istream& operator>>(ostream& is, Date& dd);
+	istream& operator>>(istream& is, Date& dd);
 
 	int days_in_month(int y, Month m);
 
-	Date next_sunday(const Date& d); // next Sunday after d
-	Date next_weekday(const Date& d); // next weekday after d
-
-
+	
 //--------------------------------------------------------------------------------------------------------------------------
 
 
@@ -119,16 +122,19 @@ namespace Lib {
 		struct Transaction {
 			Book book;
 			Patron pat;
-			Date date;
-
-			Transaction(Book, Patron, Date);
+			Date date;	
 		};
 
 		Library(vector<Book> books, vector<Patron> patrons, vector<Transaction> trans);
 		Library();
 
+		// nonmodifying operations
+		void list_books();
+		void list_patrons();
+		vector<string> patrons_owe_fees();
+
 		// modifying operations:
-		void check_out();
+		void check_out(Book& b, Patron& p, const Date& d);
 		void check_in();
 		void check_status() { // felt this met the criteria for including in header short and would be used very frequently
 			if (chkd)
@@ -136,14 +142,15 @@ namespace Lib {
 			else
 				cout << "Book is available" << endl;
 		}
+		void set_patron_fee(Patron& pat, double fees);
 		void add_book(const Book& bk);
 		void add_patron(const Patron& pat);
-		void add_trans(Transaction t);
-
+	
+		
 	private:
-		bool chkd{ false }; // books are start out in the library by default
+		bool chkd{ false }; // books start out in the library by default
 		vector<Book>books;
 		vector<Patron>patrons;
-		vector<Transaction>trans;
-	};	
+		vector<Transaction>transaction;
+	};
 };

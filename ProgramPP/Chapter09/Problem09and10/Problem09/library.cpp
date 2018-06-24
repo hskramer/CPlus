@@ -18,7 +18,21 @@ namespace Lib {
 	{
 	}
 
+	void Book::check_in()
+	{
+		if (checked_out())
+			error("check_in(): book already checked in");
+		chkd = true;
+			
+	}
 
+	void Book::check_out()
+	{
+		if (checked_out()) error("check_out(): book already checked out");
+		chkd = true; 
+					   // this is just used to access the variable that determines the status of a book and sets it to true
+	}
+	
 	string genre_name(const Book& b)
 	{
 		switch (b.get_genre())
@@ -65,6 +79,7 @@ namespace Lib {
 		return is;
 	}
 
+	
 	bool operator==(const Book& a, const Book& b)  // compare two books for equal ISBN's
 	{
 		return a.get_isbn() == b.get_isbn();
@@ -95,21 +110,30 @@ namespace Lib {
 		: uname{ "" }, libcard{ -1 }, fees(0.)
 	{
 	}
-
-	void Patron::set_fee(double f)
-	{
-		if (fees < 0) error("setUserFee(): error fee less than zero");
-		fees = f;
-	}
-
-	bool owe_fees(const Patron& p)
+	
+	bool Patron::owe_fees(const Patron & p)
 	{
 		return p.get_fees() > 0;
 	}
 
+	void Patron::set_fee(double f)
+	{
+		if (f < 0) error("Patron set_fee(): fee is less than zerp");
+		fees = f;
+	}
+	
+	bool Patron::get_inlib()
+	{
+		if (scan_libcrd())
+			return true;
+		
+		return false;
+	}
+
 	bool operator==(const Patron& a, const Patron& b)
 	{
-		return (a.get_fees() == b.get_libcard());
+		// make sure name and card are equal 
+		return (a.get_name() == b.get_name() &&	a.get_libcard() == b.get_libcard());
 	}
 
 	bool operator!=(const Patron& a, const Patron& b)
@@ -154,51 +178,20 @@ namespace Lib {
 		return true;
 	}
 
-	void  Date::add_day(int n)
+	void  Date::add_days(int n)
 	{
 		int max_days = days_in_month(y, m);
 
 		if (d + n < 0) error("add_day(): error negative days");
 
-		if (d + n > max_days){
-			switch (max_days) {
-			case 31:
-				add_month(1);
-				d += n - 1;
-				break;
-			case 30:
-				add_month(1);
-				d += n;
-				break;
-			case 29:
-				add_month(1);
-				d += n + 1;
-				break;
-			case 28:
-				add_month(1);
-				d += n + 2;
-				break;
-			default:
-				cout << "Too many days try adding a month first" << endl;
-				break;
-			}			
-		}		
+		if (d + n > max_days) error("too many days would result in adding months");
+		d += n;
 	}
 
-	void Date::add_month(int n)
-	{
-		int m{ 0 };
-		if (n < 0) error("add_month(): negative value", n);
-
-		if (n > 0 && n < 11)
-			m = (m == int(Month::dec)) ? (int(Month::jan) + n - 1) : int(Month(m)) + n;
-	}
-
-	void Date::add_year(int n)
+	void Date::add_years(int n)
 	{
 		if (n < 0) error("add_year(): negative value", n);
-
-
+		y += n;
 	}
 
 	bool leapyear(int y)
@@ -221,6 +214,7 @@ namespace Lib {
 		}
 	}
 
+	
 	bool operator==(const Date& a, const Date& b)
 	{
 		return a.year() == b.year()
@@ -236,10 +230,10 @@ namespace Lib {
 	ostream& operator<<(ostream& os, const Date& d)
 	{
 		return os << "(" << d.year()
-			<< "," << int(d.month())
+		  << "," << int(d.month())
 			<< "," << d.day() << ")";
 	}
-	
+
 	istream& operator>>(istream& is, Date& dd)
 	{
 		int y, m, d;
@@ -261,24 +255,87 @@ namespace Lib {
 
 //--------------------------------------------------------------------------------------------------------------------------
 
-	Library::Library(vector<Book> b, vector<Patron> p, vector<Transaction> t)
-		:books{ b }, patrons{ p }, trans{ t }
-	{
 
+	Library::Library(vector<Book> b, vector<Patron> p, vector<Transaction> t)
+		:books{ b }, patrons{ p }, transaction{ t }
+	{
 	}
 
 	Library::Library()
 	{
 	}
 
-	Library::Transaction::Transaction(Book bb, Patron pp, Date dd)
+	void Library::add_book(const Book& bk)
 	{
+		for (Book b : books)
+			if (bk == b)
+				error("add_book(): book in library");
+
+		books.push_back(bk);
 	}
 
-	void Library::check_out()
+	void Library::add_patron(const Patron& pat)
 	{
-		if (chkd) cout << "check_out(): book is already checked out" << endl;
-		chkd = true;
+		for (Patron p : patrons)
+			if (pat == p)
+				error("add_patron(): patron already added to library");
+
+		patrons.push_back(pat);
+	}
+
+
+	void Library::check_out(Book& bk, Patron& pat, const Date& dt)
+	{
+		bool in_library{ false };
+		bool found{ false };
+
+		for (Patron p : patrons) {
+			if (p == pat) {
+				found = true;
+				break;
+			}
+		} // note be sure you fully understand your else clause they can really be misleading this use to be an if/else statement and it didn't work
+			
+		if(!found) error("lib chec_out(): patron not found");
+			
+		
+		// if patron exists make sure book and patron in library
+			if (bk.checked_out()) { //  check_out returns that books status true if already checked out or false if not
+				in_library = false;
+			}
+			else {
+				in_library = true;
+			}
+
+			if (pat.get_inlib()) {
+				in_library = true;
+			}
+			else {
+				in_library = false;
+			}
+
+		if (pat.get_fees() > 0) error("lib check_out(): patron owes fees");
+
+	
+		if (found && in_library)
+			transaction.push_back(Transaction{ bk, pat, dt });
+		bk.check_out();
+	}
+
+	void Library::set_patron_fee(Patron& pat, double f)
+	{
+		if (pat.get_fees() < 0) error("setUserFee(): error fee less than zero");
+		
+		bool found{ false };
+		for (int i = 0; i < patrons.size(); ++i) {
+			if(patrons[i] == pat){
+				patrons[i].set_fee(f);
+				found = true;
+				break;
+			}
+		}
+
+		if (!found) error("Library set_patron_fee(): patron not found");
 	}
 
 	void Library::check_in()
@@ -287,23 +344,28 @@ namespace Lib {
 		chkd = false;
 	}
 
-	void Library::add_book(const Book& bk)
+	void Library::list_books()
 	{
-		for (Book b : books)
-			if (bk == b)
-				error("add_book(): book in library");
-			else
-				books.push_back(b);
+		for (Book bk : books) {
+			cout << bk.get_title() << " " << bk.get_author() << endl;
+		}
 	}
 
-	void Library::add_patron(const Patron& pat)
+	void Library::list_patrons()
 	{
-		for (Patron p : patrons)
-			if (pat == p)
-				error("add_patron(): patron already added to library");
-			else
-				patrons.push_back(pat);
+		for (Patron pat : patrons)
+			cout << pat.get_name() << " " << pat.get_libcard() << endl;
 	}
 
-	void Library::add_trans()
+	vector<string> Library::patrons_owe_fees()
+	{
+		vector<string> owe_fees;
+
+		for (Patron pat : patrons) {
+			if (pat.get_fees() > 0)
+				owe_fees.push_back(pat.get_name());
+		}
+
+		return owe_fees;
+	}
 };
