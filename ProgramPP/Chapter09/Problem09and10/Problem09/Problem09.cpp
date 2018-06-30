@@ -5,7 +5,7 @@ using namespace Lib;
 
 int main()
 try {
-
+	// plan returning to add long int later.
 	Library lib_one;
 
 	Book JRR{ "14-88-99-J", "Lord of the rings", "J.R.R. Tolkien", Book::fiction, 1985, false };
@@ -54,9 +54,7 @@ try {
 	vector<string> owe_fees = lib_one.patrons_owe_fees();
 
 	for (string s : owe_fees)
-		cout << s << " has unpaid fees" << endl;
-
-	next_worday(Day::monday);
+		cout << s << " has unpaid fees" << endl;	
 
 	return 0;
 }
