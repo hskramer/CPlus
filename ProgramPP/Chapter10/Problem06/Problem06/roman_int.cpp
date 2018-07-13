@@ -40,7 +40,7 @@ namespace Roman {
 
 	int roman_char_value(const char& r)
 	{
-		switch (r) { // the Roman's had no numeral for zero they did have word nulla for nothing (Wikipedia) and about 725 some used N for nulla
+		switch (r) { // the Roman's had no numeral for zero they did have word nulla for nothing (Wikipedia) and about 725AD some used N for nulla
 		case I:	 return 1;
 		case V:	 return 5;
 		case X:	 return 10;
