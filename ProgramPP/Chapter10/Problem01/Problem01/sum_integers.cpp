@@ -5,10 +5,10 @@ vector<int> read_file(string& iname)
 	vector<int>s;
 	int x{ 0 };
 
-	ifstream ist{ iname };
-	if (!ist) error("can't open file", iname);
+	ifstream ifs{ iname };
+	if (!ifs) error("can't open file", iname);
 
-	while (ist>>x)
+	while (ifs>>x)
 		s.push_back(x);
 
 	return s;

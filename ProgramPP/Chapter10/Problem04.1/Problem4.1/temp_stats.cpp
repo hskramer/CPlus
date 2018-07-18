@@ -37,7 +37,7 @@ void read_file(vector<Reading>& temps, const string& name)
 	if (!ist) error("error opening file ", name);
 
 	Reading r;
-	while (ist >> r)
+	while (ist << r)
 		temps.push_back(r);
 }
 

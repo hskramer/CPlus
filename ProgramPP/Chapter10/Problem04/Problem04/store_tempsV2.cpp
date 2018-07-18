@@ -35,11 +35,11 @@ vector<Reading> fill_temps()
 
 void write_file(vector<Reading>& temps, const string& oname)
 {
-	ofstream ost{ oname };
-	if (!ost) error("erro opening file ", oname);
+	ofstream ofs{ oname };
+	if (!ofs) error("erro opening file ", oname);
 
 	for (Reading r : temps)
-		ost << r;
+		ofs << r;
 }
 
 int main()
