@@ -33,11 +33,11 @@ ostream& operator<<(ostream& os, Reading& r)
 
 void read_file(vector<Reading>& temps, const string& name)
 {
-	ifstream ist{ name };
-	if (!ist) error("error opening file ", name);
+	ifstream ifs{ name };
+	if (!ifs) error("error opening file ", name);
 
 	Reading r;
-	while (ist << r)
+	while (ifs << r)
 		temps.push_back(r);
 }
 
