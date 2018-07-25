@@ -67,10 +67,10 @@ try {
 	write_file(alpha, file3);
 }
 catch (exception& e) {
-	cerr << "error occured " << e.what() << endl;
+	cerr << "error occurred " << e.what() << endl;
 	return -1;
 }
 catch (...) {
-	cerr << "unkown error occured" << endl;
+	cerr << "unkown error occurred" << endl;
 	return -2;
 }
