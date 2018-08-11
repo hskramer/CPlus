@@ -29,7 +29,7 @@ try {
 	list_lines(name.c_str());
 }
 catch (exception& e) {
-	cerr << "error occured " << e.what() << '\n';
+	cerr << "error occurred " << e.what() << '\n';
 	return - 1;
 }
 catch (...) {

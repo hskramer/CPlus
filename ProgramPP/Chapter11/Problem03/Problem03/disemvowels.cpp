@@ -11,26 +11,22 @@ void disemvowel(const string& file_name)
 {
 	ifstream ifs{ file_name.c_str() };
 	string oname{ "" }, line{ "" };
+	vector<char>vchar;
+	char ch{ 0 };
 
 	cout << "Name of file to write to" << '\n';
 	cin >> oname;
 
 	ofstream ofs{ oname.c_str() };
 
-//	char ch{ 0 };
-	
-	while (getline(ifs, line)) {
-		stringstream ss{ line };
-		for (char& ch : line) {
-			if (is_vowel(ch)) {
-				ch = ' ';    // had to use space otherwise compile error empty character constant quoted should contain at least one character
-				ofs << ch;
-			}
-			else if (ch == '\r')
-				ofs << '\r';
-			ofs << ch;					
-		}
+	while (ifs.get(ch)) {
+		if (!is_vowel(ch)) {
+		   vchar.push_back(ch);
+		}			
 	}
+
+	for(char& ch: vchar)
+		ofs<<ch;
 }
 
 int main()
@@ -46,10 +42,10 @@ try {
 	return 0;
 }
 catch (exception& e) {
-	cerr << "error occured " << e.what() << '\n';
+	cerr << "error: " << e.what() << '\n';
 	return -1;
 }
 catch (...) {
-	cerr << "unkoen errir occured" << '\n';
+	cerr << "Unknown error occurred" << '\n';
 	return -2;
 }

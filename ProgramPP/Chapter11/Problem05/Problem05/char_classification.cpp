@@ -2,7 +2,7 @@
 
 void classify_char(char& ch)
 {
-	cout << ch; // this is really just a series of if type cout.
+	cout << ch; // this is really just a series of if istype followed by cout.
 	if (isspace(ch))
 		cout << " isspace";
 	if (isalpha(ch))
@@ -37,10 +37,10 @@ try {
 	return 0;
 }
 catch (exception& e) {
-	cerr << "error occured " << e.what() << '\n';
+	cerr << "error occurred " << e.what() << '\n';
 	return -1;
 }
 catch (...) {
-	cerr << "unkoen error occered " << '\n';
+	cerr << "unkoen error occerred " << '\n';
 	return -2;
 }

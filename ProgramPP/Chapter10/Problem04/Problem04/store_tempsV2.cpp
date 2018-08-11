@@ -51,11 +51,11 @@ try {
 }
 catch (exception& e)
 {
-	cerr << "error occured " << e.what() << endl;
+	cerr << "error occurred " << e.what() << endl;
 	return -1;
 }
 catch (...)
 {
-	cerr << "unkown exception occured" << endl;
+	cerr << "unkown exception occurred" << endl;
 	return -2;
 }

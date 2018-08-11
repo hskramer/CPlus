@@ -39,10 +39,10 @@ try {
 	return 0;
 }
 catch (exception& e) {
-	cerr << "error occured " << e.what() << '\n';
+	cerr << "error occurred " << e.what() << '\n';
 	return -1;
 }
 catch (...) {
-	cerr << "unkown error occured" << '\n';
+	cerr << "unkown error occurred" << '\n';
 	return -2;
 }
