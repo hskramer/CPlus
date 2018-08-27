@@ -298,3 +298,14 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 std_lib_facilities.h
+GUI.cpp
+GUI.h
+Point.h
+Window.h
+Window.cpp
+Graph.h
+Graph.cpp
+Window.h
+Window.cpp
+Simple_window.h
+Simple_window.cpp
