@@ -18,7 +18,7 @@ try {
 	vector_ref<Regular_hexagon> hex;
 
 	// it works for two rows and could be extended but it's not a good implementation may try again later.
-	// tried to implement in class but I don't know how to access member functions without names.
+	
 	int x{ 100 }, y{ 100 }, R{ 75 };
 	int side = round(2 * R * sin(pi / 6));
 	for (int i = 1; i < 19; ++i) {
