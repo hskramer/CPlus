@@ -18,7 +18,7 @@ try {
 	char ch{ 0 };
 	Simple_window win{ Point{15, 15}, 1000, 1000,  "Moving point on Circle" };
 	Circle circ{ Point{win.x_max() / 2, win.y_max() / 2}, 150 }; // this allows me to change win size and still make sure the circle is centered
-	Text txt{ Point{415, 500}, "Hit next to move the o" }; // centered on the x-axis running through the circle look good
+	Text txt{ Point{415, 500}, "Hit next to move the o" }; // centered on the x-axis running
 	txt.set_font(FL_HELVETICA_BOLD);
 	txt.set_color(Color::dark_magenta);
 	circ.set_color(Color::red);
