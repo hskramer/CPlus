@@ -22,6 +22,7 @@ try {
 	Star st4{ Point{600, 600}, 12, 50 };
 	st4.set_fill_color(Color::yellow);
 	
+
 	win.attach(st1);
 	win.attach(st2);
 	win.attach(st3);
