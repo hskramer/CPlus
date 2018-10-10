@@ -9,7 +9,7 @@ using namespace Graph_lib;
 int main()
 try {
 
-	Simple_window win{ Point{15, 15}, 1000, 1000, "Striped Rectangle" };
+	Simple_window win{ Point{15, 15}, 1000, 1000, "Striped Circle" };
 
 	Striped_Circle st_circ1{ Point{250,250}, 30 };
 	st_circ1.set_color(Color::red);
