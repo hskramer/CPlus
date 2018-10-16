@@ -93,6 +93,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>fltkd.lib;wsock32.lib;comctl32.lib;fltkjpegd.lib;fltkimagesd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -123,6 +124,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>fltk.lib;wsock32.lib;comctl32.lib;fltkjpeg.lib;fltkimages.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -143,6 +145,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="chapter13.h" />
+    <ClInclude Include="chapter14.h" />
+    <ClInclude Include="Graph.h" />
+    <ClInclude Include="GUI.h" />
+    <ClInclude Include="Point.h" />
+    <ClInclude Include="Simple_window.h" />
+    <ClInclude Include="std_lib_facilities.h" />
+    <ClInclude Include="Window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="chapter13.cpp" />
+    <ClCompile Include="chapter14.cpp" />
+    <ClCompile Include="Graph.cpp" />
+    <ClCompile Include="GUI.cpp" />
+    <ClCompile Include="Simple_window.cpp" />
+    <ClCompile Include="striped_closed_poly.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,6 +1,8 @@
 #include "Graph.h"
 #include "chapter13.h"
 #include <iostream>
+#include <cmath>
+
 
 namespace Graph_lib {
 
@@ -57,6 +59,16 @@ struct Striped_Circle : Circle {
 
 	Circle::Circle;
 	void draw_lines() const;
+};
+
+//-------------------------------------------------------------------------------------------------
+
+struct Striped_closed_polyline : Closed_polyline {
+
+	Closed_polyline::Closed_polyline;
+	void draw_lines() const;
+	void set_fill_color(Color col);
+
 };
 
 
