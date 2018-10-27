@@ -17,9 +17,12 @@ try {
 	strp_cpl.add(Point{ 550, 550 });
 	strp_cpl.add(Point{ 600, 500 });	
 	strp_cpl.set_color(Color::red);
-	strp_cpl.set_fill_color(Color::red);
+	strp_cpl.set_fill_color(Color::red); 
 	
+	Graph_lib::Rectangle r{ Point{700, 700}, 150, 100 };
+	r.set_fill_color(Color::blue);
 	
+	win.attach(r);
 	win.attach(strp_cpl);
 	win.wait_for_button();
 

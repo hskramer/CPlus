@@ -70,5 +70,17 @@ struct Striped_closed_polyline : Closed_polyline {
 };
 
 
+struct Octagon : Shape {
+
+	Octagon(Point c, int dd);
+	void draw_lines() const;
+
+private:
+	int d;
+	Point center;
+};
+
+
 
 }
+

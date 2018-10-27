@@ -1,4 +1,3 @@
-#include "Graph.h"
 #include "chapter14.h"
 #include "Simple_window.h"
 #include <iostream>
@@ -16,13 +15,11 @@ try {
 	Frowny frn{ Point{500, 600}, 125 };
 	Frowny_Hat fnh{ Point{500, 600}, 125 };
 	
-	Rectangle r1{ Point{100, 700}, 75, 50 };
 
 	win.attach(sm);
 	win.attach(smh);
 	win.attach(frn);
 	win.attach(fnh);
-	win.attach(r1);
 	win.wait_for_button();
 
 	return 0;

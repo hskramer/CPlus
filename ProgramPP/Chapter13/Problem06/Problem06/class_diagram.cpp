@@ -1,4 +1,3 @@
-#include "Graph.h"
 #include "Simple_window.h"
 #include "chapter13.h"
 #include <iostream>

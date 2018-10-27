@@ -35,7 +35,7 @@ try {
 	Line L2{ e.focus2(), Point{x, y} };
 	L2.set_color(Color::dark_green);
 
-	Line tL{ Point{500, 261}, Point{850, 411} }; // tangent line with rounding and 
+	Line tL{ Point{500, 261}, Point{850, 411} }; // tangent line with rounding to the point 
 
 	e.set_color(Color::blue);
 	f1.set_color(Color::red);
