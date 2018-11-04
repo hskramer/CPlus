@@ -123,15 +123,25 @@ struct Binary_tree : Shape {
 
 	Binary_tree(int nn, int rr);
 
-	void draw_lines() const;
+	virtual void draw_lines() const;
 
-private:
+protected:
 	int levels;
 	int r;
 	Point c{ 875, 30 }; // first point at x = half screen width this allows for a symmetrical use of screen space
 	Fl_Color lncolor=Color::black;	
 };
 
+//------------------------------------------------------------------------------------------------------
+
+struct Binary_triangle : Binary_tree {
+
+	using Binary_tree::Binary_tree;
+	void draw_lines() const;
+
+};
+
+//------------------------------------------------------------------------------------------------------
 
 
 }
