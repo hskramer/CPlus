@@ -121,17 +121,25 @@ private:
 
 struct Binary_tree : Shape {
 
-	Binary_tree(int nn, int rr, Fl_Color lc, Line_style, bool ee);
+	Binary_tree(int nn, int rr, Color lc = Color::black, Line_style ls = Line_style::solid);
 
 	virtual void draw_lines() const;
+
+	// you can set color and line style using the constructor but I created the functions for a consistent interface
+	void set_color(Color cl) { lcolor = cl; }
+	void set_style(Line_style ls) { lstyle = ls; }
+
+	Point root_node() { return point(0); }
+	int number_levels() { return levels; }
+	void label_node(string node, string n_lbl); // assuming utf-8 so number of bytes equal to actual string length
 
 protected:
 	int levels;
 	int r;
-	bool e;
 	Point c{ 875, 30 }; // first point at x = half screen width this allows for a symmetrical use of screen space
-	Fl_Color lcolor;
+	Color lcolor;
 	Line_style lstyle;
+	vector_ref<Text> labels;
 };
 
 //------------------------------------------------------------------------------------------------------
