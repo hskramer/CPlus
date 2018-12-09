@@ -20,8 +20,8 @@ public:
 
 	SFunction(Fct ff, double rr1, double rr2, Point xyorig, int ncount = 100, double xs = 25, double ys = 25, T precision = 1.0);
 
+	void reset();
 	void clear_points();
-	void reset_fct(Fct *ff) { f = ff; reset(); }
 	void reset_r1(int r) { range1 = r; reset(); }
 	void reset_r2(int r) { range2 = r; reset(); }
 	void reset_orign(Point p) { Point{ orig.x = p.x, orig.y = p.y }; reset(); }
@@ -31,7 +31,6 @@ public:
 	
 
 private:
-	//void reset();
 	Fct *f;
 	double range1;
 	double range2;

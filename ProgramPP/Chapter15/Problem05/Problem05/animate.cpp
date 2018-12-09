@@ -16,8 +16,6 @@ double leib_sum(int n) {
 	}
 	return sum;
 }
-// vs 2017 15.9.3 much more restrictive before this version it would do an implicit conversion with a warning now its an error
-// unless you do an explicit cast could not get this to work even when I copied example from book there were multiple errors
 
 int main()
 try {

@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{20CF5FFB-801C-4BEE-BB29-54805546A723}</ProjectGuid>
+    <ProjectGuid>{A2337C15-7572-472F-8244-0DE7480505DD}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Problem04</RootNamespace>
+    <RootNamespace>Problem06</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -154,9 +154,9 @@
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="bar_graph.cpp" />
     <ClCompile Include="chapter15.cpp" />
     <ClCompile Include="Graph.cpp" />
-    <ClCompile Include="graph_functions.cpp" />
     <ClCompile Include="GUI.cpp" />
     <ClCompile Include="Simple_window.cpp" />
     <ClCompile Include="Window.cpp" />

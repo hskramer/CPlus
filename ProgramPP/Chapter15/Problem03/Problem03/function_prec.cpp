@@ -2,7 +2,7 @@
 #include <iostream>
 #include <stdexcept>
 
-
+using namespace Graph_lib;
 
 int slope(int x) { return x / 2; };
 
