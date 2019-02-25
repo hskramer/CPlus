@@ -1,5 +1,9 @@
 #include "../../std_lib_facilities.h"
 
+// found article that explains all my problems vs2017 Fundamental Types (C++) 11/03/2016
+// char, signed char, unsigned char are promoted to type int. So on any win64 os that is 8 bytes.
+// this explains why the size of my array was alway 8 plus num chars + \0 and why delete[] throws assertion errors 
+
 char* findx(const char* s, const char* x) {
 	
 	int i{ 0 }; 
@@ -35,14 +39,14 @@ try {
 	while (find[i]) {
 		++i;
 	}
-	char* f = new char[i + 1];
+	char* f = new char[i + 1]; 
 
 	 f = findx(find, s1);
 	 if (!f)
 		 cout << "String not found" << endl;
 	 else
 		 cout << "Found the first occurance of: " << f << endl;
-	//delete f; throws assertion error. 
+	//delete f; throws assertion error.  The reason is due to the automatic promotion to sizeof int.
 
 	return 0;
 }
