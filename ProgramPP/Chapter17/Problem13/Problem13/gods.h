@@ -19,10 +19,18 @@ public:
 		:gods{ g }, prev{ p }, succ{ s } { }
 
 	Link* insert(Link* n);
-	Link* erase(Link* n);
+	Link* add(Link* n);
+	Link* add_ordered(Link* n);
+	Link* erase();
+
+	Link* find(const string& s);
+	Link* advance(Link* p, int n);
 
 	Link* next() const { return succ; }
 	Link* previous() const { return prev; }
+
+
+	const Link* find(const string& s) const;
 
 private:
 	Link* prev;
