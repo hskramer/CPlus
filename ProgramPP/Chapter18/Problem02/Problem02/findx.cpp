@@ -1,28 +1,30 @@
 #include <iostream>
 
+// must be an easier way to do this but I just wanted to make this work
+
 char* findx(const char* s, const char* x) {
 
 	int n{ 0 }, l{ 0 };
 	const char *p = s, *f = x;
 
-	while (*s++) l++; // length of string used in for..loop
+	while (*s++) l++; 		// length of string used in for..loop
 	s -= (l + 1);
 
-	while (*f++) n++; // length of word see I can create memory and return a pointer to it for printing/ Help match
+	while (*f++) n++; 		// length of word see I can create memory and return a pointer to it for printing/ Help match
 	f -= (n + 1);
 	char *ch = nullptr;
 
 	for (int i = 0; i < l; ++i) {
-		while (*s++ != *f) {  //this stops when the fist char matches not the string so
+		while (*s++ != *f) { 		 //this stops when the fist char matches not the string so
 			if (*s == '\0') return ch;
-			++l;             // keep track of where we are in the string		
+			++l;             			// keep track of where we are in the string		
 		}
 
-		*s--; // move s back to match f
+		*s--;			// move s back to match f
 		int m{ 0 };
-		while (*s++ == *f++ && m <= l) { // this continues checking for a word match when the above loop stops on char match
+		while (*s++ == *f++ && m <= l) { 		// this continues checking for a word match when the above loop stops on fisrt char match
 			++m;
-			if (m == n) { // first char already matched
+			if (m == n) {					 // first char already matched
 				ch = const_cast<char*>(x);
 				return ch;
 			}
