@@ -10,7 +10,7 @@ int strcmp2(const char* s1, const char* s2) {
 			return -1;
 		else if (*s2 < *s1)
 			return 1;
-		*s1++, *s2++;
+		*++s1, *++s2;
 	}	
 	return 0;
 }
