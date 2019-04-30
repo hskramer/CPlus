@@ -11,7 +11,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="non_cstringcpp.cpp">
+    <ClCompile Include="cstyle_catdot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
